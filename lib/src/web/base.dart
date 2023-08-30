@@ -78,18 +78,33 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
       constraints = {
         'video': VideoOptions(
           facingMode: cameraFacing == CameraFacing.front ? 'user' : 'environment',
-          focusMode: 'continuous',
         )
       };
     } else {
-      constraints = {
-        'video': true,
-        'focusMode': 'continuous',
-      };
+      constraints = {'video': true};
+    }
+    final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
+    final track = stream?.getVideoTracks().first;
+    await _applyZoomConstraints(track);
+    return stream;
+  }
+
+  Future<void> _applyZoomConstraints(html.MediaStreamTrack? track) async {
+    if (track == null) {
+      return;
     }
 
-    final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
-    return stream;
+    final constraints = {
+      'advanced': [
+        {'zoom': 0.5},
+      ],
+    };
+
+    try {
+      await track.applyConstraints(constraints);
+    } catch (e) {
+      print('Error applying zoom constraints: $e');
+    }
   }
 
   void prepareVideoElement(html.VideoElement videoSource);
