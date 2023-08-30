@@ -74,33 +74,19 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     // Check if browser supports multiple camera's and set if supported
     final Map? capabilities = html.window.navigator.mediaDevices?.getSupportedConstraints();
     final Map<String, dynamic> constraints;
-    // if (capabilities != null && capabilities['facingMode'] as bool) {
-    //   constraints = {
-    //     'video': VideoOptions(
-    //       facingMode: cameraFacing == CameraFacing.front ? 'user' : 'environment',
-    //     )
-    //   };
-    // } else {
-    //   constraints = {'video': true};
-    // }
-    constraints = {
-      'video': true,
-      'focusMode': 'continuous',
-    };
-
-// final Map<String, dynamic> constraints = {};
-
-//     if (capabilities != null) {
-//       if (capabilities['facingMode'] as bool) {
-//         constraints['video'] = {
-//           'facingMode': cameraFacing == CameraFacing.front ? 'user' : 'environment',
-//         };
-//       }
-
-//       if (capabilities['focusMode'] as bool) {
-//         // ignore: avoid_dynamic_calls
-//         constraints['video']['focusMode'] = 'continuous'; // or 'manual' depending on options
-//       }
+    if (capabilities != null && capabilities['facingMode'] as bool) {
+      constraints = {
+        'video': VideoOptions(
+          facingMode: cameraFacing == CameraFacing.front ? 'user' : 'environment',
+          focusMode: 'continuous',
+        )
+      };
+    } else {
+      constraints = {
+        'video': true,
+        'focusMode': 'continuous',
+      };
+    }
 
     final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
     return stream;

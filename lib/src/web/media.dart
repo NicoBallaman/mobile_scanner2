@@ -21,12 +21,14 @@ class UserMediaOptions {
 @anonymous
 class VideoOptions {
   external String get facingMode;
+  external String get focusMode;
   // external DeviceIdOptions get deviceId;
   external Map get width;
   external Map get height;
 
   external factory VideoOptions({
     String? facingMode,
+    String? focusMode,
     DeviceIdOptions? deviceId,
     Map? width,
     Map? height,
