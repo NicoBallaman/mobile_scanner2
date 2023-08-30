@@ -48,8 +48,7 @@ class MobileScannerWebPlugin {
   ///   }
   ///   runApp(const MaterialApp(home: MyHome()));
   /// }
-  static WebBarcodeReaderBase barCodeReader =
-      ZXingBarcodeReader(videoContainer: vidDiv);
+  static WebBarcodeReaderBase barCodeReader = ZXingBarcodeReader(videoContainer: vidDiv);
   StreamSubscription? _barCodeStreamSubscription;
 
   /// Handle incomming messages
@@ -63,6 +62,8 @@ class MobileScannerWebPlugin {
         return cancel();
       case 'updateScanWindow':
         return Future<void>.value();
+      case 'setScale':
+        return _setScale(call.arguments as double);
       default:
         throw PlatformException(
           code: 'Unimplemented',
@@ -75,6 +76,11 @@ class MobileScannerWebPlugin {
   /// Can enable or disable the flash if available
   Future<void> _torch(arguments) async {
     barCodeReader.toggleTorch(enabled: arguments == 1);
+  }
+
+  /// Set Scale
+  Future<void> _setScale(double value) async {
+    barCodeReader.setScale(scale: value);
   }
 
   /// Starts the video stream and the scanner
@@ -108,10 +114,7 @@ class MobileScannerWebPlugin {
     try {
       List<BarcodeFormat>? formats;
       if (arguments.containsKey('formats')) {
-        formats = (arguments['formats'] as List)
-            .cast<int>()
-            .map((e) => toFormat(e))
-            .toList();
+        formats = (arguments['formats'] as List).cast<int>().map((e) => toFormat(e)).toList();
       }
 
       final Duration? detectionTimeout;
@@ -127,8 +130,7 @@ class MobileScannerWebPlugin {
         detectionTimeout: detectionTimeout,
       );
 
-      _barCodeStreamSubscription =
-          barCodeReader.detectBarcodeContinuously().listen((code) {
+      _barCodeStreamSubscription = barCodeReader.detectBarcodeContinuously().listen((code) {
         if (code != null) {
           final List<Offset>? corners = code.corners;
 
@@ -174,8 +176,7 @@ class MobileScannerWebPlugin {
 
   /// Check if any camera's are available
   static Future<bool> cameraAvailable() async {
-    final sources =
-        await html.window.navigator.mediaDevices!.enumerateDevices();
+    final sources = await html.window.navigator.mediaDevices!.enumerateDevices();
     for (final e in sources) {
       // TODO:
       // ignore: avoid_dynamic_calls
