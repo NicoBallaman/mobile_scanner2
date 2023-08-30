@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
@@ -74,22 +73,35 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
   Future<html.MediaStream?> initMediaStream(CameraFacing cameraFacing) async {
     // Check if browser supports multiple camera's and set if supported
     final Map? capabilities = html.window.navigator.mediaDevices?.getSupportedConstraints();
-    final Map<String, dynamic> constraints = {};
+    final Map<String, dynamic> constraints;
+    // if (capabilities != null && capabilities['facingMode'] as bool) {
+    //   constraints = {
+    //     'video': VideoOptions(
+    //       facingMode: cameraFacing == CameraFacing.front ? 'user' : 'environment',
+    //     )
+    //   };
+    // } else {
+    //   constraints = {'video': true};
+    // }
+    constraints = {
+      'video': true,
+      'focusMode': 'continuous',
+    };
 
-    if (capabilities != null) {
-      if (capabilities['facingMode'] as bool) {
-        constraints['video'] = {
-          'facingMode': cameraFacing == CameraFacing.front ? 'user' : 'environment',
-        };
-      }
+// final Map<String, dynamic> constraints = {};
 
-      if (capabilities['focusMode'] as bool) {
-        // ignore: avoid_dynamic_calls
-        constraints['video']['focusMode'] = 'continuous'; // or 'manual' depending on options
-      }
-    } else {
-      constraints['video'] = true;
-    }
+//     if (capabilities != null) {
+//       if (capabilities['facingMode'] as bool) {
+//         constraints['video'] = {
+//           'facingMode': cameraFacing == CameraFacing.front ? 'user' : 'environment',
+//         };
+//       }
+
+//       if (capabilities['focusMode'] as bool) {
+//         // ignore: avoid_dynamic_calls
+//         constraints['video']['focusMode'] = 'continuous'; // or 'manual' depending on options
+//       }
+
     final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
     return stream;
   }
