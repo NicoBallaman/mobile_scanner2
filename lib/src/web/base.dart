@@ -74,51 +74,24 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
   Future<html.MediaStream?> initMediaStream(CameraFacing cameraFacing) async {
     // Check if browser supports multiple camera's and set if supported
     final Map? capabilities = html.window.navigator.mediaDevices?.getSupportedConstraints();
-    final Map<String, dynamic> constraints;
-    if (capabilities != null && capabilities['facingMode'] as bool) {
-      constraints = {
-        'video': VideoOptions(
-          facingMode: cameraFacing == CameraFacing.front ? 'user' : 'environment',
-        )
-      };
+    final Map<String, dynamic> constraints = {};
+
+    if (capabilities != null) {
+      if (capabilities['facingMode'] as bool) {
+        constraints['video'] = {
+          'facingMode': cameraFacing == CameraFacing.front ? 'user' : 'environment',
+        };
+      }
+
+      if (capabilities['focusMode'] as bool) {
+        // ignore: avoid_dynamic_calls
+        constraints['video']['focusMode'] = 'continuous'; // or 'manual' depending on options
+      }
     } else {
-      constraints = {'video': true};
+      constraints['video'] = true;
     }
     final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
-
-    if (stream != null) {
-      _startChangingFocus(stream);
-    }
     return stream;
-  }
-
-  void _startChangingFocus(html.MediaStream stream) {
-    final focusValues = [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1.0];
-    int currentIndex = 0;
-
-    void changeFocus() {
-      final currentFocusValue = focusValues[currentIndex];
-      _changeCameraFocus(stream, currentFocusValue);
-
-      currentIndex = (currentIndex + 1) % focusValues.length;
-    }
-
-    // Configurar el temporizador para ejecutar changeFocus cada 250 milisegundos
-    Timer.periodic(const Duration(milliseconds: 250), (_) {
-      changeFocus();
-    });
-  }
-
-  // Función para cambiar el enfoque de la cámara
-  void _changeCameraFocus(html.MediaStream stream, double focusValue) {
-    final videoTracks = stream.getVideoTracks();
-    if (videoTracks.isNotEmpty) {
-      final settings = videoTracks[0].getSettings();
-      settings['focusDistance'] = focusValue;
-      videoTracks[0].applyConstraints({
-        'advanced': [settings]
-      });
-    }
   }
 
   void prepareVideoElement(html.VideoElement videoSource);
