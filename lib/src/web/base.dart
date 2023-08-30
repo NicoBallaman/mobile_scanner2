@@ -74,16 +74,8 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
   Future<html.MediaStream?> initMediaStream(CameraFacing cameraFacing) async {
     // Check if browser supports multiple camera's and set if supported
     final Map? capabilities = html.window.navigator.mediaDevices?.getSupportedConstraints();
-    final Map<String, dynamic> constraints;
-    if (capabilities != null && capabilities['facingMode'] as bool) {
-      constraints = {
-        'video': VideoOptions(
-          facingMode: cameraFacing == CameraFacing.front ? 'user' : 'environment',
-        )
-      };
-    } else {
-      constraints = {'video': true};
-    }
+    final Map<String, dynamic> constraints = {'video': true};
+
     final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
 
     if (stream != null) {
