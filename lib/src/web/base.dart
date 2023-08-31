@@ -103,15 +103,9 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     if (track == null || track.isEmpty) {
       return;
     }
-    final cap = track.first.getCapabilities();
-    throw PlatformException(
-      code: 'Unimplemented',
-      details: cap.toString(),
-    );
-
     await track.first.applyConstraints({
       'advanced': [
-        {'zoom': 0.5}
+        {'zoom': 5}
       ]
     });
   }
