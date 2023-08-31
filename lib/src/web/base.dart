@@ -88,6 +88,7 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
           {'zoom': 5},
           {'width': 1575, 'height': 2800},
           {'aspectRatio': 9 / 16},
+          {'focusDistance': 0},
         ],
       };
     } else {
@@ -99,6 +100,7 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
           {'zoom': 5},
           {'width': 1575, 'height': 2800},
           {'aspectRatio': 9 / 16},
+          {'focusDistance': 0},
         ],
       };
     }
@@ -152,6 +154,7 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
         {'zoom': 5},
         {'width': 1575, 'height': 2800},
         {'aspectRatio': 9 / 16},
+        {'focusDistance': 0},
       ],
     });
   }
