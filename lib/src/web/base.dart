@@ -83,7 +83,7 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
           facingMode: cameraFacing == CameraFacing.front ? 'user' : 'environment',
         ),
         'advanced': [
-          //{'zoom': 5},
+          {'zoom': 1.5},
           {'focusDistance': 0},
         ],
       };
@@ -91,7 +91,7 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
       constraints = {
         'video': true,
         'advanced': [
-          //{'zoom': 5},
+          {'zoom': 1.5},
           {'focusDistance': 0},
         ],
       };
@@ -141,7 +141,7 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
 
     await track.first.applyConstraints({
       'advanced': [
-        //{'zoom': 5},
+        {'zoom': 1.5},
         {'focusDistance': 0},
       ],
     });
