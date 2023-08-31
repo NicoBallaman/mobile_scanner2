@@ -85,13 +85,14 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
         'video': {
           'width': {'min': 1575, 'ideal': 1575},
           'height': {'min': 2800, 'ideal': 2800},
-          'aspectRatio': {'ideal': 9 / 16},
-          'focusDistance': 0,
+          'aspectRatio': {'ideal': 16 / 9},
+          'focusDistance': 0.009999999776482582,
           'focusMode': 'manual',
         },
+        'focusDistance': 0.009999999776482582,
         'advanced': [
           // {'zoom': 1.5},
-          // {'focusDistance': 0},
+          {'focusDistance': 0.009999999776482582},
           // {'focusMode': 'manual'},
         ],
         // 'focusDistance': 0,
