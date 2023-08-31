@@ -85,7 +85,10 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
         'advanced': [
           {'zoom': 1.5},
           {'focusDistance': 0},
+          {'focusMode': 'manual'},
         ],
+        'focusDistance': 0,
+        'focusMode': 'manual',
       };
     } else {
       constraints = {
@@ -93,7 +96,10 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
         'advanced': [
           {'zoom': 1.5},
           {'focusDistance': 0},
+          {'focusMode': 'manual'},
         ],
+        'focusDistance': 0,
+        'focusMode': 'manual',
       };
     }
     final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
@@ -143,7 +149,10 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
       'advanced': [
         {'zoom': 1.5},
         {'focusDistance': 0},
+        {'focusMode': 'manual'},
       ],
+      'focusDistance': 0,
+      'focusMode': 'manual',
     });
   }
 
