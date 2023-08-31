@@ -83,20 +83,21 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
         //   facingMode: cameraFacing == CameraFacing.front ? 'user' : 'environment',
         // ),
         'video': {
-          'width': {'min': 1575, 'ideal': 1575},
-          'height': {'min': 2800, 'ideal': 2800},
-          'aspectRatio': {'ideal': 16 / 9},
-          'focusDistance': 0.009999999776482582,
+          'width': {'min': 4000, 'ideal': 4000},
+          'height': {'min': 3000, 'ideal': 3000},
+          // 'width': {'min': 1575, 'ideal': 1575},
+          // 'height': {'min': 2800, 'ideal': 2800},
+          // 'aspectRatio': {'ideal': 16 / 9},
+          'focusDistance': 0,
           'focusMode': 'manual',
         },
-        'focusDistance': 0.009999999776482582,
         'advanced': [
           // {'zoom': 1.5},
-          {'focusDistance': 0.009999999776482582},
-          // {'focusMode': 'manual'},
+          {'focusDistance': 0},
+          {'focusMode': 'manual'},
         ],
-        // 'focusDistance': 0,
-        // 'focusMode': 'manual',
+        'focusDistance': 0,
+        'focusMode': 'manual',
       };
     } else {
       constraints = {
