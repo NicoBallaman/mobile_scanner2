@@ -1,6 +1,7 @@
 import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
 import 'package:mobile_scanner/src/enums/camera_facing.dart';
@@ -55,6 +56,8 @@ abstract class WebBarcodeReaderBase {
   /// Can enable or disable the flash if available
   Future<void> toggleTorch({required bool enabled});
 
+  Future<void> setScale({required double scale});
+
   /// Determine whether device has flash
   Future<bool> hasTorch();
 }
@@ -78,22 +81,11 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
       constraints = {
         'video': VideoOptions(
           facingMode: cameraFacing == CameraFacing.front ? 'user' : 'environment',
-        ),
-        'advanced': [
-          {'focusMode': "continuous"},
-          {'zoom': 0.5},
-        ]
+        )
       };
     } else {
-      constraints = {
-        'video': true,
-        'advanced': [
-          {'focusMode': "continuous"},
-          {'zoom': 0.5},
-        ]
-      };
+      constraints = {'video': true};
     }
-
     final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
     return stream;
   }
@@ -104,6 +96,25 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     html.MediaStream stream,
     html.VideoElement videoSource,
   );
+
+  @override
+  Future<void> setScale({required double scale}) async {
+    final track = localMediaStream?.getVideoTracks();
+    if (track == null || track.isEmpty) {
+      return;
+    }
+    final cap = track.first.getCapabilities();
+    throw PlatformException(
+      code: 'Unimplemented',
+      details: cap.toString(),
+    );
+
+    await track.first.applyConstraints({
+      'advanced': [
+        {'zoom': 0.5}
+      ]
+    });
+  }
 
   @override
   Future<void> stop() async {
