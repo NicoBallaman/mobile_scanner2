@@ -79,27 +79,34 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     final Map<String, dynamic> constraints;
     if (capabilities != null && capabilities['facingMode'] as bool) {
       constraints = {
-        'video': VideoOptions(
-          facingMode: cameraFacing == CameraFacing.front ? 'user' : 'environment',
-        ),
+        // 'video': VideoOptions(
+        //   facingMode: cameraFacing == CameraFacing.front ? 'user' : 'environment',
+        // ),
+        'video': {
+          'width': {'min': 1575, 'ideal': 1575},
+          'height': {'min': 2800, 'ideal': 2800},
+          'aspectRatio': {'ideal': 9 / 16},
+          'focusDistance': 0,
+          'focusMode': 'manual',
+        },
         'advanced': [
-          {'zoom': 1.5},
-          {'focusDistance': 0},
-          {'focusMode': 'manual'},
+          // {'zoom': 1.5},
+          // {'focusDistance': 0},
+          // {'focusMode': 'manual'},
         ],
-        'focusDistance': 0,
-        'focusMode': 'manual',
+        // 'focusDistance': 0,
+        // 'focusMode': 'manual',
       };
     } else {
       constraints = {
         'video': true,
         'advanced': [
-          {'zoom': 1.5},
-          {'focusDistance': 0},
-          {'focusMode': 'manual'},
+          // {'zoom': 1.5},
+          // {'focusDistance': 0},
+          // {'focusMode': 'manual'},
         ],
-        'focusDistance': 0,
-        'focusMode': 'manual',
+        // 'focusDistance': 0,
+        // 'focusMode': 'manual',
       };
     }
     final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
@@ -147,12 +154,12 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
 
     await track.first.applyConstraints({
       'advanced': [
-        {'zoom': 1.5},
-        {'focusDistance': 0},
-        {'focusMode': 'manual'},
+        // {'zoom': 1.5},
+        // {'focusDistance': 0},
+        // {'focusMode': 'manual'},
       ],
-      'focusDistance': 0,
-      'focusMode': 'manual',
+      // 'focusDistance': 0,
+      // 'focusMode': 'manual',
     });
   }
 
