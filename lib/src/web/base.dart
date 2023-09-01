@@ -100,41 +100,32 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     // }
     if (capabilities != null && capabilities['facingMode'] as bool) {
       constraints = {
-        // 'video': VideoOptions(
-        //   facingMode: cameraFacing == CameraFacing.front ? 'user' : 'environment',
-        // ),
-        'video': {
-          'facingMode': cameraFacing == CameraFacing.front ? 'user' : 'environment',
-          'width': {'ideal': 3000},
-          'height': {'ideal': 3000},
-          'frameRate': {'ideal': 30},
-          // 'width': {'min': 1575, 'ideal': 1575},
-          // 'height': {'min': 2800, 'ideal': 2800},
-          // 'aspectRatio': {'ideal': 16 / 9},
-          'focusDistance': 0,
-          'focusMode': 'continuous',
-        },
-        'width': {'ideal': 3000},
-        'height': {'ideal': 3000},
-        'advanced': [
-          {'zoom': 3},
-          // {'focusDistance': 0},
-          // {'focusMode': 'continuous'},
-        ],
-        'focusDistance': 0,
-        'focusMode': 'continuous',
+        'video': VideoOptions(
+          facingMode: cameraFacing == CameraFacing.front ? 'user' : 'environment',
+        ),
+        // 'video': {
+        //   'facingMode': cameraFacing == CameraFacing.front ? 'user' : 'environment',
+        //   'width': {'ideal': 3000},
+        //   'height': {'ideal': 3000},
+        //   'frameRate': {'ideal': 30},
+        //   // 'width': {'min': 1575, 'ideal': 1575},
+        //   // 'height': {'min': 2800, 'ideal': 2800},
+        //   // 'aspectRatio': {'ideal': 16 / 9},
+        //   'focusDistance': 0,
+        //   'focusMode': 'continuous',
+        // },
+        // 'width': {'ideal': 3000},
+        // 'height': {'ideal': 3000},
+        // 'advanced': [
+        //   {'zoom': 3},
+        //   // {'focusDistance': 0},
+        //   // {'focusMode': 'continuous'},
+        // ],
+        // 'focusDistance': 0,
+        // 'focusMode': 'continuous',
       };
     } else {
-      constraints = {
-        'video': true,
-        'advanced': [
-          // {'zoom': 1.5},
-          // {'focusDistance': 0},
-          // {'focusMode': 'manual'},
-        ],
-        // 'focusDistance': 0,
-        // 'focusMode': 'manual',
-      };
+      constraints = {'video': true};
     }
     final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
     return stream;
@@ -166,9 +157,6 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
         {'zoom': 3},
         {'width': 3000, 'height': 3000},
       ],
-
-      // 'focusDistance': 0,
-      // 'focusMode': 'manual',
     });
   }
 
