@@ -123,41 +123,45 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
 
   @override
   Future<void> setScale({required double scale}) async {
+    print('start capabilities setScale');
     final track = localMediaStream?.getVideoTracks();
+    print('01');
     if (track == null || track.isEmpty) {
       return;
     }
-    final capabilities = track.first.getCapabilities();
-
-    // {
-    //  aspectRatio: {max: 4000, min: 0.0003333333333333333},
-    //  colorTemperature: {max: 7000, min: 2850, step: 50},
-    //  deviceId: aaf1fdb979404e59fa0f4265d43d3abe5f99b36dfa84ae970cadd228f34f20cb,
-    //  exposureCompensation: {max: 2, min: -2, step: 0.10000000149011612},
-    //  exposureMode: [continuous, manual],
-    //  exposureTime: {max: 6714, min: 0, step: 0},
-    //  facingMode: [environment],
-    //  focusDistance: {max: 1.6276918649673462, min: 0, step: 0.009999999776482582},
-    //  focusMode: [manual],
-    //  frameRate: {max: 30, min: 0},
-    //  groupId: d386606941c1b2e65ff09f76184f6f30e4b4ce7e1918472b98ebb28109812f4e,
-    //  height: {max: 3000, min: 1},
-    //  iso: {max: 2400, min: 50, step: 1},
-    //  resizeMode: [none, crop-and-scale],
-    //  torch: true,
-    //  whiteBalanceMode: [continuous, manual],
-    //  width: {max: 4000, min: 1},
+    print('02');
     //  zoom: {max: 8, min: 1, step: 0.1}
-    // }
-    print('capabilities setScale');
+    final capabilities = track.first.getCapabilities();
+    if (capabilities['zoom'] == null) {
+      print('03');
+      throw PlatformException(
+        code: 'Unsupported',
+        details: 'Zoom not supported by the camera',
+      );
+    }
+    print('04');
     print(capabilities);
-    print('end capabilities setScale');
+    print('05');
+    print((capabilities['zoom'] as Map)['min']);
+    print('06');
+    print((capabilities['zoom'] as Map)['max']);
+    print('07');
+    print((capabilities['zoom'] as Map)['step']);
+    print('08');
 
-    track.first.applyConstraints({
+    final minZoom = (capabilities['zoom'] as Map)['min'] as double;
+    final maxZoom = (capabilities['zoom'] as Map)['max'] as double;
+    final step = (capabilities['zoom'] as Map)['step'] as double;
+    print('09');
+    final zoom = _calculateZoom(0.5, minZoom, maxZoom, step);
+    print('10');
+
+    await track.first.applyConstraints({
       'advanced': [
-        // {'zoom': 1.5},
+        {'zoom': zoom},
       ],
-    }).then((value) => null);
+    });
+    print('end capabilities setScale');
   }
 
   // 0.5
