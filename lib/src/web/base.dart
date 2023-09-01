@@ -106,13 +106,14 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
           'frameRate': {'ideal': 30},
           'width': {'min': 720, 'ideal': 3000},
           'height': {'min': 720, 'ideal': 3000},
+          'aspectRatio': 1,
         },
         'advanced': [
           //{'zoom': 4.5},
           {'focusDistance': 0},
           {'focusMode': 'continuous'},
-          {'aspectRatio': 1},
         ],
+        'aspectRatio': 1,
       };
     } else {
       constraints = {'video': true};
