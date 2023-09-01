@@ -145,7 +145,6 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     });
   }
 
-  // 0.5
   double _calculateZoom(double percent, double minZoom, double maxZoom, double step) {
     if (percent < 0.0 || percent > 1.0) {
       throw ArgumentError('Percentage must be in the range of 0 to 1.');
