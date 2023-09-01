@@ -103,7 +103,7 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
         'video': {
           'facingMode': cameraFacing == CameraFacing.front ? 'user' : 'environment',
           'frameRate': {'ideal': 30},
-          'width': {'min': 1280, 'ideal': 3000},
+          'width': {'min': 720, 'ideal': 3000},
           'height': {'min': 720, 'ideal': 3000},
           // 'focusDistance': 0,
           // 'focusMode': 'continuous',
