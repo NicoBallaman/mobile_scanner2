@@ -62,6 +62,8 @@ class MobileScannerWebPlugin {
         return cancel();
       case 'updateScanWindow':
         return Future<void>.value();
+      case 'setScale':
+        return _setScale(call.arguments as double);
       default:
         throw PlatformException(
           code: 'Unimplemented',
@@ -74,6 +76,10 @@ class MobileScannerWebPlugin {
   /// Can enable or disable the flash if available
   Future<void> _torch(arguments) async {
     barCodeReader.toggleTorch(enabled: arguments == 1);
+  }
+
+  Future<void> _setScale(double scale) async {
+    barCodeReader.setScale(scale: scale);
   }
 
   /// Starts the video stream and the scanner

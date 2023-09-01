@@ -56,6 +56,8 @@ abstract class WebBarcodeReaderBase {
   /// Can enable or disable the flash if available
   Future<void> toggleTorch({required bool enabled});
 
+  Future<void> setScale({required double scale});
+
   /// Determine whether device has flash
   Future<bool> hasTorch();
 }
@@ -115,14 +117,12 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
       constraints = {'video': true};
     }
     final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
-    if (capabilities != null && capabilities['zoom'] as bool) {
-      _setScale(scale: 0.5);
-    }
 
     return stream;
   }
 
-  Future<void> _setScale({required double scale}) async {
+  @override
+  Future<void> setScale({required double scale}) async {
     final track = localMediaStream?.getVideoTracks();
     if (track == null || track.isEmpty) {
       return;
