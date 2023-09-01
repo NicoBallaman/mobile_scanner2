@@ -111,6 +111,7 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
           //{'zoom': 4.5},
           {'focusDistance': 0},
           {'focusMode': 'continuous'},
+          {'aspectRatio': 1},
         ],
       };
     } else {
