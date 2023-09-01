@@ -102,8 +102,8 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
         'video': {
           'facingMode': cameraFacing == CameraFacing.front ? 'user' : 'environment',
           'frameRate': {'ideal': 30},
-          'width': {'min': 1080, 'ideal': 3000},
-          'height': {'min': 1080, 'ideal': 3000},
+          'width': {'min': 720, 'ideal': 3000},
+          'height': {'min': 720, 'ideal': 3000},
         },
         'advanced': [
           //{'zoom': 4.5},
@@ -115,9 +115,9 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
       constraints = {'video': true};
     }
     final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
-    // if (capabilities != null && capabilities['zoom'] as bool) {
-    //   _setScale(scale: 0.5);
-    // }
+    if (capabilities != null && capabilities['zoom'] as bool) {
+      _setScale(scale: 0.5);
+    }
 
     return stream;
   }
