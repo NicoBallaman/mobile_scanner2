@@ -96,9 +96,6 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     //  width: {max: 4000, min: 1},
     //  zoom: {max: 8, min: 1, step: 0.1}
     // }
-    print('capabilities');
-    print(capabilities);
-    print('END capabilities');
 
     if (capabilities != null && capabilities['facingMode'] as bool) {
       constraints = {
@@ -152,10 +149,9 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     //  width: {max: 4000, min: 1},
     //  zoom: {max: 8, min: 1, step: 0.1}
     // }
-    print(capabilities['zoom']);
-    print(capabilities['zoom']['max']);
-    print(capabilities['zoom']['min']);
-    print(capabilities['zoom']['step']);
+    print('capabilities setScale');
+    print(capabilities);
+    print('end capabilities setScale');
 
     track.first.applyConstraints({
       'advanced': [
