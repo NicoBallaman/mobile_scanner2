@@ -107,7 +107,8 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
           'height': {'min': 720, 'ideal': 1575},
         },
         'advanced': [
-          {'zoom': 4.5},
+          //{'zoom': 4},
+          {'zoom': 6},
         ],
       };
     } else {
