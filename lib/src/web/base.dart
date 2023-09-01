@@ -123,37 +123,30 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
 
   @override
   Future<void> setScale({required double scale}) async {
-    print('start capabilities setScale');
     final track = localMediaStream?.getVideoTracks();
-    print('01');
     if (track == null || track.isEmpty) {
       return;
     }
-    print('02');
     //  zoom: {max: 8, min: 1, step: 0.1}
     final capabilities = track.first.getCapabilities();
     if (capabilities['zoom'] == null) {
-      print('03');
       throw PlatformException(
         code: 'Unsupported',
         details: 'Zoom not supported by the camera',
       );
     }
-    print('04');
     print(capabilities);
-    print('05');
-    print((capabilities['zoom'] as Map)['min']);
-    print('06');
-    print((capabilities['zoom'] as Map)['max']);
-    print('07');
-    print((capabilities['zoom'] as Map)['step']);
-    print('08');
 
     final minZoom = (capabilities['zoom'] as Map)['min'] as double;
     final maxZoom = (capabilities['zoom'] as Map)['max'] as double;
     final step = (capabilities['zoom'] as Map)['step'] as double;
     print('09');
     final zoom = _calculateZoom(0.5, minZoom, maxZoom, step);
+    final zoom2 = _calculateZoom(0.45, minZoom, maxZoom, step);
+    final zoom3 = _calculateZoom(0.4, minZoom, maxZoom, step);
+    print('zoom: $zoom');
+    print('zoom2: $zoom2');
+    print('zoom3: $zoom3');
     print('10');
 
     await track.first.applyConstraints({
