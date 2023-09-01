@@ -115,9 +115,9 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
       constraints = {'video': true};
     }
     final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
-    if (capabilities != null && capabilities['zoom'] as bool) {
-      _setScale(scale: 0.5);
-    }
+    // if (capabilities != null && capabilities['zoom'] as bool) {
+    //   _setScale(scale: 0.5);
+    // }
 
     return stream;
   }
