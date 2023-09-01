@@ -160,13 +160,13 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     // );
 
     await track.first.applyConstraints({
-      'width': 3000,
-      'height': 3000,
+      'width': {'min': 3000, 'ideal': 3000},
+      'height': {'min': 3000, 'ideal': 3000},
       'advanced': [
         {'zoom': 3},
-        // {'focusDistance': 0},
-        // {'focusMode': 'manual'},
+        {'width': 3000, 'height': 3000},
       ],
+
       // 'focusDistance': 0,
       // 'focusMode': 'manual',
     });
