@@ -137,7 +137,7 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     final minZoom = (capabilities['zoom'] as Map)['min'] as double;
     final maxZoom = (capabilities['zoom'] as Map)['max'] as double;
     final step = (capabilities['zoom'] as Map)['step'] as double;
-    final zoom = _calculateZoom(0.4, minZoom, maxZoom, step);
+    final zoom = _calculateZoom(scale, minZoom, maxZoom, step);
     await track.first.applyConstraints({
       'advanced': [
         {'zoom': zoom},
