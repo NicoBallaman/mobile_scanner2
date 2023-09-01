@@ -106,14 +106,12 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
           'frameRate': {'ideal': 30},
           'width': {'min': 720, 'ideal': 3000},
           'height': {'min': 720, 'ideal': 3000},
-          'aspectRatio': 1,
         },
         'advanced': [
           //{'zoom': 4.5},
           {'focusDistance': 0},
           {'focusMode': 'continuous'},
         ],
-        'aspectRatio': 1,
       };
     } else {
       constraints = {'video': true};
@@ -129,7 +127,6 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     if (track == null || track.isEmpty) {
       return;
     }
-    //  zoom: {max: 8, min: 1, step: 0.1}
     final capabilities = track.first.getCapabilities();
     if (capabilities['zoom'] == null) {
       throw PlatformException(
@@ -137,26 +134,15 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
         details: 'Zoom not supported by the camera',
       );
     }
-    print(capabilities);
-
     final minZoom = (capabilities['zoom'] as Map)['min'] as double;
     final maxZoom = (capabilities['zoom'] as Map)['max'] as double;
     final step = (capabilities['zoom'] as Map)['step'] as double;
-    print('09');
-    final zoom = _calculateZoom(0.5, minZoom, maxZoom, step);
-    final zoom2 = _calculateZoom(0.45, minZoom, maxZoom, step);
-    final zoom3 = _calculateZoom(0.4, minZoom, maxZoom, step);
-    print('zoom: $zoom');
-    print('zoom2: $zoom2');
-    print('zoom3: $zoom3');
-    print('10');
-
+    final zoom = _calculateZoom(0.4, minZoom, maxZoom, step);
     await track.first.applyConstraints({
       'advanced': [
-        {'zoom': zoom3},
+        {'zoom': zoom},
       ],
     });
-    print('end capabilities setScale');
   }
 
   // 0.5
