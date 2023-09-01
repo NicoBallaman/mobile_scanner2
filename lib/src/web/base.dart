@@ -105,7 +105,7 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
         // ),
         'video': {
           'facingMode': cameraFacing == CameraFacing.front ? 'user' : 'environment',
-          'width': {'ideal': 4000},
+          'width': {'ideal': 3000},
           'height': {'ideal': 3000},
           'frameRate': {'ideal': 30},
           // 'width': {'min': 1575, 'ideal': 1575},
@@ -114,8 +114,10 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
           'focusDistance': 0,
           'focusMode': 'continuous',
         },
+        'width': {'ideal': 3000},
+        'height': {'ideal': 3000},
         'advanced': [
-          {'zoom': 4},
+          {'zoom': 3},
           // {'focusDistance': 0},
           // {'focusMode': 'continuous'},
         ],
@@ -158,8 +160,10 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     // );
 
     await track.first.applyConstraints({
+      'width': 3000,
+      'height': 3000,
       'advanced': [
-        // {'zoom': 1.5},
+        {'zoom': 3},
         // {'focusDistance': 0},
         // {'focusMode': 'manual'},
       ],
