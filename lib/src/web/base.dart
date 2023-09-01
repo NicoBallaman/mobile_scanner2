@@ -56,8 +56,6 @@ abstract class WebBarcodeReaderBase {
   /// Can enable or disable the flash if available
   Future<void> toggleTorch({required bool enabled});
 
-  Future<void> setScale({required double scale});
-
   /// Determine whether device has flash
   Future<bool> hasTorch();
 }
@@ -98,6 +96,12 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     //  width: {max: 4000, min: 1},
     //  zoom: {max: 8, min: 1, step: 0.1}
     // }
+    print('capabilities');
+    print(capabilities);
+    print(capabilities?['height']);
+    print(capabilities?['width']);
+    print('END capabilities');
+
     if (capabilities != null && capabilities['facingMode'] as bool) {
       constraints = {
         'video': {
@@ -105,16 +109,12 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
           'frameRate': {'ideal': 30},
           'width': {'min': 720, 'ideal': 3000},
           'height': {'min': 720, 'ideal': 3000},
-          // 'focusDistance': 0,
-          // 'focusMode': 'continuous',
         },
         'advanced': [
           {'zoom': 4.5},
           {'focusDistance': 0},
           {'focusMode': 'continuous'},
         ],
-        // 'focusDistance': 0,
-        // 'focusMode': 'continuous',
       };
     } else {
       constraints = {'video': true};
@@ -123,34 +123,25 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     return stream;
   }
 
+  // 0.5
+  double _calculateZoom(double percent, double minZoom, double maxZoom, double step) {
+    if (percent < 0.0 || percent > 1.0) {
+      throw ArgumentError('Percentage must be in the range of 0 to 1.');
+    }
+    final double zoomRange = maxZoom - minZoom;
+    final double zoom = minZoom + percent * zoomRange;
+    final double adjustedZoom = (zoom / step).round() * step;
+    final double finalZoom = adjustedZoom.clamp(minZoom, maxZoom);
+    final String parsedZoom = finalZoom.toStringAsFixed(2);
+    return double.parse(parsedZoom);
+  }
+
   void prepareVideoElement(html.VideoElement videoSource);
 
   Future<void> attachStreamToVideo(
     html.MediaStream stream,
     html.VideoElement videoSource,
   );
-
-  @override
-  Future<void> setScale({required double scale}) async {
-    final track = localMediaStream?.getVideoTracks();
-    if (track == null || track.isEmpty) {
-      return;
-    }
-    // final cap = track.first.getCapabilities();
-    // throw PlatformException(
-    //   code: 'Unimplemented',
-    //   details: '------- ${cap.toString()} -------',
-    // );
-
-    // await track.first.applyConstraints({
-    //   'width': {'min': 3000, 'ideal': 3000},
-    //   'height': {'min': 3000, 'ideal': 3000},
-    //   'advanced': [
-    //     {'zoom': 3},
-    //     {'width': 3000, 'height': 3000},
-    //   ],
-    // });
-  }
 
   @override
   Future<void> stop() async {
