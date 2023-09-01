@@ -151,7 +151,7 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
 
     await track.first.applyConstraints({
       'advanced': [
-        {'zoom': zoom},
+        {'zoom': zoom3},
       ],
     });
     print('end capabilities setScale');
