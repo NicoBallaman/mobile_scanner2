@@ -77,11 +77,33 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     // Check if browser supports multiple camera's and set if supported
     final Map? capabilities = html.window.navigator.mediaDevices?.getSupportedConstraints();
     final Map<String, dynamic> constraints;
+    // {
+    //  aspectRatio: {max: 4000, min: 0.0003333333333333333},
+    //  colorTemperature: {max: 7000, min: 2850, step: 50},
+    //  deviceId: aaf1fdb979404e59fa0f4265d43d3abe5f99b36dfa84ae970cadd228f34f20cb,
+    //  exposureCompensation: {max: 2, min: -2, step: 0.10000000149011612},
+    //  exposureMode: [continuous, manual],
+    //  exposureTime: {max: 6714, min: 0, step: 0},
+    //  facingMode: [environment],
+    //  focusDistance: {max: 1.6276918649673462, min: 0, step: 0.009999999776482582},
+    //  focusMode: [manual],
+    //  frameRate: {max: 30, min: 0},
+    //  groupId: d386606941c1b2e65ff09f76184f6f30e4b4ce7e1918472b98ebb28109812f4e,
+    //  height: {max: 3000, min: 1},
+    //  iso: {max: 2400, min: 50, step: 1},
+    //  resizeMode: [none, crop-and-scale],
+    //  torch: true,
+    //  whiteBalanceMode: [continuous, manual],
+    //  width: {max: 4000, min: 1},
+    //  zoom: {max: 8, min: 1, step: 0.1}
+    // }
     if (capabilities != null && capabilities['facingMode'] as bool) {
       constraints = {
         // 'video': VideoOptions(
         //   facingMode: cameraFacing == CameraFacing.front ? 'user' : 'environment',
         // ),
+        'width': {'ideal': 4000},
+        'height': {'ideal': 3000},
         'video': {
           'width': {'min': 4000, 'ideal': 4000},
           'height': {'min': 3000, 'ideal': 3000},
@@ -89,15 +111,15 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
           // 'height': {'min': 2800, 'ideal': 2800},
           // 'aspectRatio': {'ideal': 16 / 9},
           'focusDistance': 0,
-          'focusMode': 'manual',
+          'focusMode': 'continuous',
         },
         'advanced': [
-          // {'zoom': 1.5},
+          {'zoom': 2},
           {'focusDistance': 0},
-          {'focusMode': 'manual'},
+          {'focusMode': 'continuous'},
         ],
         'focusDistance': 0,
-        'focusMode': 'manual',
+        'focusMode': 'continuous',
       };
     } else {
       constraints = {
