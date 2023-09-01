@@ -100,29 +100,28 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     // }
     if (capabilities != null && capabilities['facingMode'] as bool) {
       constraints = {
-        'video': VideoOptions(
-          facingMode: cameraFacing == CameraFacing.front ? 'user' : 'environment',
-        ),
-        // 'video': {
-        //   'facingMode': cameraFacing == CameraFacing.front ? 'user' : 'environment',
-        //   'width': {'ideal': 3000},
-        //   'height': {'ideal': 3000},
-        //   'frameRate': {'ideal': 30},
-        //   // 'width': {'min': 1575, 'ideal': 1575},
-        //   // 'height': {'min': 2800, 'ideal': 2800},
-        //   // 'aspectRatio': {'ideal': 16 / 9},
-        //   'focusDistance': 0,
-        //   'focusMode': 'continuous',
-        // },
+        // 'video': VideoOptions(
+        //   facingMode: cameraFacing == CameraFacing.front ? 'user' : 'environment',
+        // ),
+        'video': {
+          'facingMode': cameraFacing == CameraFacing.front ? 'user' : 'environment',
+          'width': {'ideal': 3000},
+          'height': {'ideal': 3000},
+          'frameRate': {'ideal': 30},
+          // 'width': {'min': 1575, 'ideal': 1575},
+          // 'height': {'min': 2800, 'ideal': 2800},
+          'focusDistance': 0,
+          'focusMode': 'continuous',
+        },
         // 'width': {'ideal': 3000},
         // 'height': {'ideal': 3000},
-        // 'advanced': [
-        //   {'zoom': 3},
-        //   // {'focusDistance': 0},
-        //   // {'focusMode': 'continuous'},
-        // ],
-        // 'focusDistance': 0,
-        // 'focusMode': 'continuous',
+        'advanced': [
+          {'zoom': 3},
+          // {'focusDistance': 0},
+          // {'focusMode': 'continuous'},
+        ],
+        'focusDistance': 0,
+        'focusMode': 'continuous',
       };
     } else {
       constraints = {'video': true};
@@ -150,14 +149,14 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     //   details: '------- ${cap.toString()} -------',
     // );
 
-    await track.first.applyConstraints({
-      'width': {'min': 3000, 'ideal': 3000},
-      'height': {'min': 3000, 'ideal': 3000},
-      'advanced': [
-        {'zoom': 3},
-        {'width': 3000, 'height': 3000},
-      ],
-    });
+    // await track.first.applyConstraints({
+    //   'width': {'min': 3000, 'ideal': 3000},
+    //   'height': {'min': 3000, 'ideal': 3000},
+    //   'advanced': [
+    //     {'zoom': 3},
+    //     {'width': 3000, 'height': 3000},
+    //   ],
+    // });
   }
 
   @override
