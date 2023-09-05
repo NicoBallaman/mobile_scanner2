@@ -78,6 +78,7 @@ class MobileScannerWebPlugin {
     barCodeReader.toggleTorch(enabled: arguments == 1);
   }
 
+  // Can set camera zoom
   Future<void> _setScale(double scale) async {
     barCodeReader.setScale(scale: scale);
   }

@@ -6,7 +6,6 @@ import 'package:js/js.dart';
 import 'package:js/js_util.dart';
 import 'package:mobile_scanner/src/enums/camera_facing.dart';
 import 'package:mobile_scanner/src/objects/barcode.dart';
-import 'package:mobile_scanner/src/web/media.dart';
 
 class JsLibrary {
   /// The name of global variable where library is stored.
@@ -76,7 +75,7 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
   Future<html.MediaStream?> initMediaStream(CameraFacing cameraFacing) async {
     // Check if browser supports multiple camera's and set if supported
     final Map? capabilities = html.window.navigator.mediaDevices?.getSupportedConstraints();
-    final Map<String, dynamic> constraints;
+
     // Camera capabilities
     // {
     //  aspectRatio: {max: 4000, min: 0.0003333333333333333},
@@ -99,23 +98,19 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     //  zoom: {max: 8, min: 1, step: 0.1}
     // }
 
-    if (capabilities != null && capabilities['facingMode'] as bool) {
-      constraints = {
-        'video': {
-          'facingMode': cameraFacing == CameraFacing.front ? 'user' : 'environment',
-          'frameRate': {'ideal': 30},
-          'width': {'min': 720, 'ideal': 3000},
-          'height': {'min': 720, 'ideal': 3000},
-        },
-        'advanced': [
-          //{'zoom': 4.5},
-          {'focusDistance': 0},
-          {'focusMode': 'continuous'},
-        ],
-      };
-    } else {
-      constraints = {'video': true};
-    }
+    final Map<String, dynamic> constraints = {
+      'video': {
+        if (capabilities != null && capabilities['facingMode'] as bool) 'facingMode': cameraFacing == CameraFacing.front ? 'user' : 'environment',
+        'frameRate': {'ideal': 30},
+        'width': {'min': 720, 'ideal': 3000},
+        'height': {'min': 720, 'ideal': 3000},
+      },
+      'advanced': [
+        {'zoom': 2},
+        {'focusDistance': 0},
+        {'focusMode': 'continuous'},
+      ],
+    };
     final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
 
     return stream;
