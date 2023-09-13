@@ -73,33 +73,11 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
 
   Future<html.MediaStream?> initMediaStream(CameraFacing cameraFacing) async {
     // Filtra las cámaras traseras
-    final deviceId = await _getBackDeviceId();
+    final deviceId = await _getCameraBackDeviceId();
 
     // Check if browser supports multiple camera's and set if supported
     final Map? capabilities = html.window.navigator.mediaDevices?.getSupportedConstraints();
 
-    // Camera capabilities
-    // {
-    //  aspectRatio: {max: 4000, min: 0.0003333333333333333},
-    //  colorTemperature: {max: 7000, min: 2850, step: 50},
-    //  deviceId: aaf1fdb979404e59fa0f4265d43d3abe5f99b36dfa84ae970cadd228f34f20cb,
-    //  exposureCompensation: {max: 2, min: -2, step: 0.10000000149011612},
-    //  exposureMode: [continuous, manual],
-    //  exposureTime: {max: 6714, min: 0, step: 0},
-    //  facingMode: [environment],
-    //  focusDistance: {max: 1.6276918649673462, min: 0, step: 0.009999999776482582},
-    //  focusMode: [manual],
-    //  frameRate: {max: 30, min: 0},
-    //  groupId: d386606941c1b2e65ff09f76184f6f30e4b4ce7e1918472b98ebb28109812f4e,
-    //  height: {max: 3000, min: 1},
-    //  iso: {max: 2400, min: 50, step: 1},
-    //  resizeMode: [none, crop-and-scale],
-    //  torch: true,
-    //  whiteBalanceMode: [continuous, manual],
-    //  width: {max: 4000, min: 1},
-    //  zoom: {max: 8, min: 1, step: 0.1}
-    // }
-    print('deviceId: $deviceId');
     final Map<String, dynamic> constraints = {
       'video': {
         if (capabilities != null && capabilities['facingMode'] as bool) 'facingMode': cameraFacing == CameraFacing.front ? 'user' : 'environment',
@@ -113,21 +91,25 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     return stream;
   }
 
-  Future<String?> _getBackDeviceId() async {
+  Future<String?> _getCameraBackDeviceId() async {
+    const maxAperture = 4000;
     final devices = await html.window.navigator.mediaDevices?.enumerateDevices() ?? [];
     String? deviceId;
-    int aperture = 400;
-    for (final device in devices) {
-      if (device is html.MediaDeviceInfo && device.kind == 'videoinput' && device.label != null && device.label!.toLowerCase().contains('back')) {
-        final value = device.label!.split(', ').first.split(' ').last;
-        print('$value - ${device.deviceId} - ${device.label}');
-        if ((int.tryParse(value) ?? 400) < aperture) {
-          aperture = int.tryParse(value) ?? 400;
-          deviceId = device.deviceId;
+    int currentAperture = maxAperture;
+    try {
+      for (final device in devices) {
+        if (device is html.MediaDeviceInfo && device.kind == 'videoinput' && device.label != null && device.label!.toLowerCase().contains('back')) {
+          final value = device.label!.split(', ').first.split(' ').last;
+          if ((int.tryParse(value) ?? maxAperture) < currentAperture) {
+            currentAperture = int.tryParse(value) ?? maxAperture;
+            deviceId = device.deviceId;
+          }
         }
       }
+      return deviceId;
+    } catch (e) {
+      return null;
     }
-    return deviceId;
   }
 
   @override
