@@ -75,12 +75,13 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     final devices = await html.window.navigator.mediaDevices?.enumerateDevices() ?? [];
 
     // Filtra las cámaras traseras
-    print(devices.toString());
+
+    print('devices ${devices.toString()}');
     devices.forEach((element) {
       if (element is List<html.MediaDeviceInfo>) {
         element.forEach((e) {
-          print(e.kind);
-          print(e.label);
+          print('List: ${e.kind}');
+          print('List: ${e.label}');
         });
       }
       if (element is html.MediaDeviceInfo) {
