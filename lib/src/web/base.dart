@@ -99,13 +99,13 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     //  width: {max: 4000, min: 1},
     //  zoom: {max: 8, min: 1, step: 0.1}
     // }
-
+    print('deviceId: $deviceId');
     final Map<String, dynamic> constraints = {
       'video': {
         if (capabilities != null && capabilities['facingMode'] as bool) 'facingMode': cameraFacing == CameraFacing.front ? 'user' : 'environment',
+        if (deviceId != null) 'deviceId': deviceId,
         //'width': {'min': 640, 'ideal': 640},
         //'height': {'min': 640, 'ideal': 640},
-        'deviceId': 'd2e616d0f89452578ccf0b33744f2f25002ffa07fa826a370c189f247f46362d',
       },
     };
     final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
@@ -115,11 +115,19 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
 
   Future<String?> _getBackDeviceId() async {
     final devices = await html.window.navigator.mediaDevices?.enumerateDevices() ?? [];
+    String? deviceId;
+    int aperture = 400;
     for (final device in devices) {
       if (device is html.MediaDeviceInfo && device.kind == 'videoinput' && device.label != null && device.label!.toLowerCase().contains('back')) {
-        print('${device.deviceId} - ${device.label}');
+        final value = device.label!.split(', ').first.split(' ').last;
+        print('$value - ${device.deviceId} - ${device.label}');
+        if ((int.tryParse(value) ?? 400) < aperture) {
+          aperture = int.tryParse(value) ?? 400;
+          deviceId = device.deviceId;
+        }
       }
     }
+    return deviceId;
   }
 
   @override
