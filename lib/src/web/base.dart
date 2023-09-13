@@ -1,7 +1,6 @@
 import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
 import 'package:mobile_scanner/src/enums/camera_facing.dart';
@@ -101,15 +100,9 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     final Map<String, dynamic> constraints = {
       'video': {
         if (capabilities != null && capabilities['facingMode'] as bool) 'facingMode': cameraFacing == CameraFacing.front ? 'user' : 'environment',
-        'frameRate': {'ideal': 30},
-        'width': {'min': 720, 'ideal': 3000},
-        'height': {'min': 720, 'ideal': 3000},
+        'width': {'min': 640, 'ideal': 640},
+        'height': {'min': 640, 'ideal': 640},
       },
-      'advanced': [
-        {'zoom': 2},
-        {'focusDistance': 0},
-        {'focusMode': 'continuous'},
-      ],
     };
     final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
 
@@ -118,26 +111,27 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
 
   @override
   Future<void> setScale({required double scale}) async {
-    final track = localMediaStream?.getVideoTracks();
-    if (track == null || track.isEmpty) {
+    try {
+      final track = localMediaStream?.getVideoTracks();
+      if (track == null || track.isEmpty) {
+        return;
+      }
+      final capabilities = track.first.getCapabilities();
+      if (capabilities == {} || capabilities['zoom'] == null) {
+        return;
+      }
+      final minZoom = (capabilities['zoom'] as Map)['min'] as double;
+      final maxZoom = (capabilities['zoom'] as Map)['max'] as double;
+      final step = (capabilities['zoom'] as Map)['step'] as double;
+      final zoom = _calculateZoom(scale, minZoom, maxZoom, step);
+      await track.first.applyConstraints({
+        'advanced': [
+          {'zoom': zoom},
+        ],
+      });
+    } catch (e) {
       return;
     }
-    final capabilities = track.first.getCapabilities();
-    if (capabilities['zoom'] == null) {
-      throw PlatformException(
-        code: 'Unsupported',
-        details: 'Zoom not supported by the camera',
-      );
-    }
-    final minZoom = (capabilities['zoom'] as Map)['min'] as double;
-    final maxZoom = (capabilities['zoom'] as Map)['max'] as double;
-    final step = (capabilities['zoom'] as Map)['step'] as double;
-    final zoom = _calculateZoom(scale, minZoom, maxZoom, step);
-    await track.first.applyConstraints({
-      'advanced': [
-        {'zoom': zoom},
-      ],
-    });
   }
 
   double _calculateZoom(double percent, double minZoom, double maxZoom, double step) {
