@@ -72,23 +72,8 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
   int get videoHeight => video.videoHeight;
 
   Future<html.MediaStream?> initMediaStream(CameraFacing cameraFacing) async {
-    final devices = await html.window.navigator.mediaDevices?.enumerateDevices() ?? [];
-
     // Filtra las cámaras traseras
-
-    print('devices ${devices.toString()}');
-    devices.forEach((element) {
-      if (element is List<html.MediaDeviceInfo>) {
-        element.forEach((e) {
-          print('List: ${e.kind}');
-          print('List: ${e.label}');
-        });
-      }
-      if (element is html.MediaDeviceInfo) {
-        print(element.kind);
-        print(element.label);
-      }
-    });
+    final deviceId = await _getBackDeviceId();
 
     // Check if browser supports multiple camera's and set if supported
     final Map? capabilities = html.window.navigator.mediaDevices?.getSupportedConstraints();
@@ -125,6 +110,18 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
 
     return stream;
+  }
+
+  Future<String?> _getBackDeviceId() async {
+    final devices = await html.window.navigator.mediaDevices?.enumerateDevices() ?? [];
+    for (final device in devices) {
+      if (device is html.MediaDeviceInfo) {
+        print('${device.deviceId} - ${device.label}');
+      }
+      if (device is html.MediaDeviceInfo && device.kind == 'videoinput' && device.label != null && device.label!.toLowerCase().contains('back')) {
+        print('---------- ${device.deviceId} - ${device.label}');
+      }
+    }
   }
 
   @override
