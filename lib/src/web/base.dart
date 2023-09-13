@@ -105,6 +105,7 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
         if (capabilities != null && capabilities['facingMode'] as bool) 'facingMode': cameraFacing == CameraFacing.front ? 'user' : 'environment',
         //'width': {'min': 640, 'ideal': 640},
         //'height': {'min': 640, 'ideal': 640},
+        deviceId: 'd2e616d0f89452578ccf0b33744f2f25002ffa07fa826a370c189f247f46362d',
       },
     };
     final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
@@ -115,9 +116,6 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
   Future<String?> _getBackDeviceId() async {
     final devices = await html.window.navigator.mediaDevices?.enumerateDevices() ?? [];
     for (final device in devices) {
-      if (device is html.MediaDeviceInfo) {
-        print('${device.deviceId} - ${device.label}');
-      }
       if (device is html.MediaDeviceInfo && device.kind == 'videoinput' && device.label != null && device.label!.toLowerCase().contains('back')) {
         print('---------- ${device.deviceId} - ${device.label}');
       }
