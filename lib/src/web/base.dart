@@ -76,6 +76,12 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
 
     // Filtra las cámaras traseras
     print(devices.toString());
+    devices.forEach((element) {
+      if (element is html.MediaDeviceInfo) {
+        print(element.kind);
+        print(element.label);
+      }
+    });
 
     // Check if browser supports multiple camera's and set if supported
     final Map? capabilities = html.window.navigator.mediaDevices?.getSupportedConstraints();
