@@ -117,7 +117,7 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
     final devices = await html.window.navigator.mediaDevices?.enumerateDevices() ?? [];
     for (final device in devices) {
       if (device is html.MediaDeviceInfo && device.kind == 'videoinput' && device.label != null && device.label!.toLowerCase().contains('back')) {
-        print('---------- ${device.deviceId} - ${device.label}');
+        print('${device.deviceId} - ${device.label}');
       }
     }
   }
