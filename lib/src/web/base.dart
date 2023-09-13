@@ -105,7 +105,7 @@ mixin InternalStreamCreation on WebBarcodeReaderBase {
         if (capabilities != null && capabilities['facingMode'] as bool) 'facingMode': cameraFacing == CameraFacing.front ? 'user' : 'environment',
         //'width': {'min': 640, 'ideal': 640},
         //'height': {'min': 640, 'ideal': 640},
-        deviceId: 'd2e616d0f89452578ccf0b33744f2f25002ffa07fa826a370c189f247f46362d',
+        'deviceId': 'd2e616d0f89452578ccf0b33744f2f25002ffa07fa826a370c189f247f46362d',
       },
     };
     final stream = await html.window.navigator.mediaDevices?.getUserMedia(constraints);
